@@ -2,9 +2,9 @@
 #  William C Miller
 #  Maleficjs Copyright (c) 2014
 #
-window.MaleficPackage = {} if not window.MaleficPackage
+window.Malefic = {} if not window.Malefic
 
-class window.MaleficPackage.Malefic extends _
+class window.Malefic.Core
   #
   #
   StatusContinue                     : 100
@@ -155,7 +155,7 @@ class window.MaleficPackage.Malefic extends _
     @Log(rdata) if rdata
     promise =
       id: 'method:{#url}'
-      
+
     @_ajax(
       url: url
       method: method
@@ -230,7 +230,7 @@ class window.MaleficPackage.Malefic extends _
         _q = @_qvals[_key]
         @_qvals[_key] = null
         return _q
-        
+
     for el in query
       results._qvals = []
       results._qkeys.push(selector)
@@ -311,10 +311,10 @@ class window.MaleficPackage.Malefic extends _
         if time
           if not time.day
             time.day = 0
-            
+
           if not time.hours
             time.hours = 0
-            
+
           if not time.minutes
             time.minutes = 0
 

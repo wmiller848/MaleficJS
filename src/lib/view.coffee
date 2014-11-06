@@ -2,9 +2,9 @@
 #  William C Miller
 #  Maleficjs Copyright (c) 2014
 #
+window.Malefic = {} if not window.Malefic
 
-
-class window.MaleficPackage.View extends window.MaleficPackage.Malefic
+class window.Malefic.View extends window.Malefic.Core
   constructor: ->
     super('Malefic:View')
     @Context = 'body' if not @Context

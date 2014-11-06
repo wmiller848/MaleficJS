@@ -1,0 +1,20 @@
+{
+  "name": "MaleficJS",
+  "version": "0.0.1",
+  "dependencies": {
+    "gulp": "latest",
+    "gulp-coffee": "latest",
+    "gulp-coffeelint": "latest",
+    "gulp-concat": "latest",
+    "gulp-uglify": "latest",
+    "gulp-sourcemaps": "latest",
+    "del": "latest",
+    "gulp-jasmine": "latest",
+    "gulp-jasmine2-phantomjs": "latest"
+  },
+  "coffeelintConfig": {
+    "max_line_length": {
+      "level": "ignore"
+    }
+  }
+}
