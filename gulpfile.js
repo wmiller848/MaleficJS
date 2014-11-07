@@ -12,6 +12,7 @@ var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var jasmine = require('gulp-jasmine');
 var jasminePhantomJs = require('gulp-jasmine2-phantomjs');
+var jasminePh = require('gulp-jasmine-phantom');
 var del = require('del');
 
 var paths = {
@@ -56,12 +57,16 @@ gulp.task('compile:spec', ['compile:release'], function() {
 });
 
 gulp.task('spec', ['compile:spec'], function() {
-	return gulp.src('spec/runner.html')
-  	.pipe(jasminePhantomJs());
+	//return gulp.src('spec/runner.html')
+  //.pipe(jasminePhantomJs());
+  return gulp.src(['bin/dev/malefic.coffee.js', 'bin/spec/malefic.spec.coffee.js'])
+  	.pipe(jasminePh({
+  		integration: true
+  	}));
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.scripts, ['src']);
+  gulp.watch('./src/lib/*.coffee', ['spec']);
 });
 
-gulp.task('default', ['watch', 'compile:release']);
+//gulp.task('default', ['watch']);

@@ -10,6 +10,7 @@
     "gulp-sourcemaps": "latest",
     "del": "latest",
     "gulp-jasmine": "latest",
+    "gulp-jasmine-phantom": "latest",
     "gulp-jasmine2-phantomjs": "latest"
   },
   "coffeelintConfig": {
