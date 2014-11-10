@@ -8,10 +8,9 @@
     "gulp-concat": "latest",
     "gulp-uglify": "latest",
     "gulp-sourcemaps": "latest",
-    "del": "latest",
-    "gulp-jasmine": "latest",
     "gulp-jasmine-phantom": "latest",
-    "gulp-jasmine2-phantomjs": "latest"
+    "gulp-plumber": "latest",
+    "del": "latest"
   },
   "coffeelintConfig": {
     "max_line_length": {
