@@ -47,7 +47,7 @@ class window.Malefic.View extends window.Malefic.Core
           helper(@)
         )
 
-    @node = @AppendHTML(
+    @node = @Append(
       parent: @container
       type: 'div'
       attributes:

@@ -37,6 +37,7 @@ class @HelperAjax
   Listen: (handle) ->
     @_hander = handle
 
+  # Trigger a response in @MockNetworkLatency ms
   Trigger: (event, data={}) ->
     #console.log("XMLHttpRequest::Trigger Registered")
     setTimeout( =>

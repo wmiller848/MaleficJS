@@ -30,6 +30,11 @@ describe('Core', ->
       expect(@core.Domain('big.subdomain.mapchat.io')).toBe('mapchat.io')
       done()
     )
+
+    it('should return host from SUPER BIG sub-domain', (done) ->
+      expect(@core.Domain('www.super.big.subdomain.mapchat.io')).toBe('mapchat.io')
+      done()
+    )
   )
 
   #
