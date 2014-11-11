@@ -57,13 +57,11 @@ gulp.task('compile:release', ['compile:dev'], function() {
   if (state === STATE_OK) {
     return gulp.src(paths.src)
     	.pipe(plumber(handleError))
-    	.pipe(sourcemaps.init())
     	.pipe(coffeelint())
       .pipe(coffeelint.reporter())
     	.pipe(coffee())
       .pipe(uglify())
       .pipe(concat('malefic.coffee.min.js'))
-      .pipe(sourcemaps.write())
       .pipe(gulp.dest('bin/release'));
   } else if (state === STATE_ERR) {
     console.log('State is "error" skipping...');

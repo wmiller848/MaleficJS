@@ -226,7 +226,7 @@ describe('Core', ->
 
   #
   #
-  describe('#AppendHTML', ->
+  describe('#Append', ->
     beforeEach( (done) ->
       silent = true
       @core = window.Malefic.Core('CoreSpecTest', silent)
