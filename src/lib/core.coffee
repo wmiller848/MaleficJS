@@ -281,8 +281,14 @@ class window.Malefic.Core
         try
           stash = JSON.parse(window.sessionStorage[key]) if window.sessionStorage[key]
           stash = JSON.parse(window.localStorage[key]) if not stash and window.localStorage[key]
-          if stash and stash.expires
-            v = stash.value
+          if stash
+            now = new Date()
+            expires = new Date(stash.expires)
+            if expires > now or stash.expires is 'never'
+              v = stash.value
+            else
+              window.sessionStorage[key] = null
+              window.localStorage[key] = null
         catch err
           @Log(err)
       if typeof v is 'undefined'
@@ -312,28 +318,29 @@ class window.Malefic.Core
           date = new Date()
           expires = new Date()
           if not time.days
-            time.days = 0    
-          expires.setTime(date.getTime() + time.days)
+            time.days = 0
+          else
+            expires.setTime(date.getDate() + time.days)
 
           if not time.hours
             time.hours = 0
           else
             time.hours *= 3600000
-          expires.setTime(expires.getTime() + time.hours)
+            expires.setTime(date.getTime() + time.hours)
 
           if not time.minutes
             time.minutes = 0
           else
             time.minutes *= 60000
-          expires.setTime(expires.getTime() + time.minutes)
+            expires.setTime(date.getTime() + time.minutes)
 
           if not time.seconds
             time.seconds = 0
           else
             time.seconds *= 1000
-          expires.setTime(expires.getTime() + time.seconds)
+            expires.setTime(date.getTime() + time.seconds)
 
-          expires = expires.toGMTString()
+          expires = expires.toUTCString()
         else
           expires = 'never'
 
