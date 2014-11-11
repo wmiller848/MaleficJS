@@ -309,18 +309,31 @@ class window.Malefic.Core
         domain = options?.domain or window.location.hostname
         time = options?.time
         if time
-          if not time.day
-            time.day = 0
+          date = new Date()
+          expires = new Date()
+          if not time.days
+            time.days = 0    
+          expires.setTime(date.getTime() + time.days)
 
           if not time.hours
             time.hours = 0
+          else
+            time.hours *= 3600000
+          expires.setTime(expires.getTime() + time.hours)
 
           if not time.minutes
             time.minutes = 0
+          else
+            time.minutes *= 60000
+          expires.setTime(expires.getTime() + time.minutes)
 
-          date = new Date()
-          date.setTime(date.getTime() + (time.days * 24 * 60 * 60 * 1000) + (time.hours * 60 * 60 * 1000) + (time.minutes * 60 * 1000))
-          expires = date.toGMTString()
+          if not time.seconds
+            time.seconds = 0
+          else
+            time.seconds *= 1000
+          expires.setTime(expires.getTime() + time.seconds)
+
+          expires = expires.toGMTString()
         else
           expires = 'never'
 
