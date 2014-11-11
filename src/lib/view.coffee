@@ -14,7 +14,9 @@ class window.Malefic.View extends window.Malefic.Core
     @hbs = null
     @node = null
     @Actions = @Actions()
+    @_Load()
 
+  _Load: ->
     req = @Ajax(@Template)
     req.then = (err, res) =>
       if err
@@ -61,32 +63,26 @@ class window.Malefic.View extends window.Malefic.Core
     @OnBind?()
 
   Disable: (el=@node) ->
-    classes = el.className.split(' ')
-    el.className = ''
-    for c in classes
-      if c isnt 'ss_enabled' and c isnt 'ss_disabled' then el.className += c + ' '
-    el.className += 'ss_disabled'
+    el.disabled = true
 
   Enable: (el=@node) ->
-    classes = el.className.split(' ')
-    el.className = ''
-    for c in classes
-      if c isnt 'ss_disabled' and c isnt 'ss_enabled' then el.className += c + ' '
-    el.className += 'ss_enabled'
+    el.disabled = false
 
   Hide: (el=@node) ->
-    classes = el.className.split(' ')
-    el.className = ''
-    for c in classes
-      if c isnt 'ssview-show' and c isnt 'ssview-hidden' then el.className += c + ' '
-    el.className += 'ssview-hidden'
+    el.style.display = 'none'
 
   Show: (el=@node) ->
+    el.style.display = 'inherit'
+
+  ToggleClass: (el=@node, cssClass) ->
     classes = el.className.split(' ')
+    hasClass = false
     el.className = ''
     for c in classes
-      if c isnt 'ssview-hidden' and c isnt 'ssview-show' then el.className += c + ' '
-    el.className += 'ssview-show'
+      if c isnt cssClass then el.className += c + ' '
+      else if c is cssClass then hasClass = true
+    if not hasClass
+      el.className += cssClass
 
   Ready: (cb) ->
     if @_loaded is true then cb()
