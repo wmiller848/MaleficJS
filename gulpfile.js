@@ -26,15 +26,18 @@ var coffee = require('gulp-coffee');
 var coffeelint = require('gulp-coffeelint');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
+var compress = require('gulp-yuicompressor');
 var sourcemaps = require('gulp-sourcemaps');
 var jasmine = require('gulp-jasmine-phantom');
 var plumber = require('gulp-plumber');
 var del = require('del');
+var order = require('gulp-order');
 
 var paths = {
-  src: ['src/lib/*.coffee'],
-  spec: ['spec/*.coffee'],
-  vendor: ['src/vendor/*.js']
+  src: 'src/lib/*.coffee',
+  bin: 'src/lib/*.js',
+  spec: 'spec/*.coffee',
+  vendor: 'src/vendor/*.js'
 };
 
 var STATE_OK = 0,
@@ -64,7 +67,8 @@ gulp.task('compile:dev', ['clean'], function() {
       .pipe(coffeelint.reporter())
     	.pipe(coffee())
       .pipe(gulp.src(paths.vendor))
-      .pipe(concat('malefic.coffee.js'))
+      .pipe(order([paths.vendor, paths.bin], {base: '.'}))
+      .pipe(concat('malefic.js'))
       //.pipe(sourcemaps.write())
       .pipe(gulp.dest('bin/dev'));
   } else if (state === STATE_ERR) {
@@ -80,8 +84,12 @@ gulp.task('compile:release', ['compile:dev'], function() {
       .pipe(coffeelint.reporter())
     	.pipe(coffee())
       .pipe(gulp.src(paths.vendor))
-      .pipe(uglify())
-      .pipe(concat('malefic.coffee.min.js'))
+      .pipe(order([paths.vendor, paths.bin], {base: '.'}))
+      //.pipe(uglify())
+      .pipe(compress({
+        type: 'js'
+      }))
+      .pipe(concat('malefic.min.js'))
       .pipe(gulp.dest('bin/release'));
   } else if (state === STATE_ERR) {
     console.log('State is "error" skipping...');
@@ -95,7 +103,7 @@ gulp.task('compile:spec', ['compile:release'], function() {
   		.pipe(coffeelint())
       .pipe(coffeelint.reporter())
     	.pipe(coffee())
-    	.pipe(concat('malefic.spec.coffee.js'))
+    	.pipe(concat('malefic.spec.js'))
     	.pipe(gulp.dest('bin/spec'));
   } else if (state === STATE_ERR) {
     console.log('State is "error" skipping...');
@@ -104,7 +112,7 @@ gulp.task('compile:spec', ['compile:release'], function() {
 
 gulp.task('spec', ['compile:spec'], function() {
   if (state === STATE_OK) {
-    return gulp.src(['bin/dev/malefic.coffee.js', 'bin/spec/malefic.spec.coffee.js'])
+    return gulp.src(['bin/dev/malefic.js', 'bin/spec/malefic.spec.js'])
     	.pipe(jasmine({
     		integration: true
     	}));

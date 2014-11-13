@@ -23,7 +23,7 @@
 
 window.Malefic = {} if not window.Malefic
 
-class window.Malefic.Core
+class window.Malefic.Core extends _
   #
   #
   StatusContinue                     : 100

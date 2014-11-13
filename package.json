@@ -7,10 +7,12 @@
     "gulp-coffeelint": "latest",
     "gulp-concat": "latest",
     "gulp-uglify": "latest",
+    "gulp-yuicompressor": "latest",
     "gulp-sourcemaps": "latest",
     "gulp-jasmine-phantom": "latest",
     "gulp-plumber": "latest",
-    "del": "latest"
+    "del": "latest",
+    "gulp-order": "latest"
   },
   "coffeelintConfig": {
     "max_line_length": {
