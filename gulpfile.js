@@ -47,7 +47,7 @@ function handleError (err) {
   state = STATE_ERR;
   setTimeout(function() {
     state = STATE_OK;
-  }, 50)
+  }, 200)
 }
 
 gulp.task('clean', function(cb) {
