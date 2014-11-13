@@ -33,7 +33,8 @@ var del = require('del');
 
 var paths = {
   src: ['src/lib/*.coffee'],
-  spec: ['spec/*.coffee']
+  spec: ['spec/*.coffee'],
+  vendor: ['src/vendor/*.js']
 };
 
 var STATE_OK = 0,
@@ -62,6 +63,7 @@ gulp.task('compile:dev', ['clean'], function() {
     	.pipe(coffeelint())
       .pipe(coffeelint.reporter())
     	.pipe(coffee())
+      .pipe(gulp.src(paths.vendor))
       .pipe(concat('malefic.coffee.js'))
       //.pipe(sourcemaps.write())
       .pipe(gulp.dest('bin/dev'));
@@ -77,6 +79,7 @@ gulp.task('compile:release', ['compile:dev'], function() {
     	.pipe(coffeelint())
       .pipe(coffeelint.reporter())
     	.pipe(coffee())
+      .pipe(gulp.src(paths.vendor))
       .pipe(uglify())
       .pipe(concat('malefic.coffee.min.js'))
       .pipe(gulp.dest('bin/release'));
