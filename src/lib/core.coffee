@@ -83,7 +83,7 @@ class window.Malefic.Core extends _
   #
   Log: ->
     return if @silent is true
-    return if window.ss_log is false
+    return if window.Malefic.log is false
     prefix = @version + " | "
     for msg in arguments
       if typeof msg is "string"
