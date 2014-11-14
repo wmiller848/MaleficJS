@@ -6,7 +6,6 @@
     "gulp-coffee": "latest",
     "gulp-coffeelint": "latest",
     "gulp-concat": "latest",
-    "gulp-uglify": "latest",
     "gulp-yuicompressor": "latest",
     "gulp-sourcemaps": "latest",
     "gulp-jasmine-phantom": "latest",

@@ -24,9 +24,14 @@ root = @
 
 describe('Core', ->
 
+  it('should be defined', ->
+    expect(window.Malefic.Core).toBeDefined()
+  )
+
   #
   #
   describe('#Domain', ->
+
     beforeEach( (done) ->
       silent = true
       @core = new window.Malefic.Core('CoreSpecTest', silent)
@@ -57,6 +62,7 @@ describe('Core', ->
   #
   #
   describe('#Watch', ->
+
     beforeEach( (done) ->
       silent = true
       @core = new window.Malefic.Core('CoreSpecTest', silent)

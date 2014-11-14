@@ -20,12 +20,10 @@
 //  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 //  DEALINGS IN THE SOFTWARE.
 
-
 var gulp = require('gulp');
 var coffee = require('gulp-coffee');
 var coffeelint = require('gulp-coffeelint');
 var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
 var compress = require('gulp-yuicompressor');
 var sourcemaps = require('gulp-sourcemaps');
 var jasmine = require('gulp-jasmine-phantom');
@@ -34,10 +32,11 @@ var del = require('del');
 var order = require('gulp-order');
 
 var paths = {
-  src: 'src/lib/*.coffee',
-  bin: 'src/lib/*.js',
+  vendor: 'src/vendor/*.js',
   spec: 'spec/*.coffee',
-  vendor: 'src/vendor/*.js'
+  src: 'src/lib/*.coffee',
+  tmp: 'bin/tmp/*.coffee.js',
+  dev: 'bin/dev/*.js'
 };
 
 var STATE_OK = 0,
@@ -58,7 +57,7 @@ gulp.task('clean', function(cb) {
   del(['bin'], cb);
 });
 
-gulp.task('compile:dev', ['clean'], function() {
+gulp.task('compile', ['clean'], function() {
   if (state === STATE_OK) {
     return gulp.src(paths.src)
     	.pipe(plumber(handleError))
@@ -66,10 +65,19 @@ gulp.task('compile:dev', ['clean'], function() {
     	.pipe(coffeelint())
       .pipe(coffeelint.reporter())
     	.pipe(coffee())
-      .pipe(gulp.src(paths.vendor))
-      .pipe(order([paths.vendor, paths.bin], {base: '.'}))
-      .pipe(concat('malefic.js'))
+      .pipe(concat('malefic.coffee.js'))
       //.pipe(sourcemaps.write())
+      .pipe(gulp.dest('bin/tmp'));
+  } else if (state === STATE_ERR) {
+    console.log('State is "error" skipping...');
+  }
+});
+
+gulp.task('compile:dev', ['compile'], function() {
+  if (state === STATE_OK) {
+    return gulp.src([paths.vendor, paths.tmp])
+      .pipe(order([paths.vendor, paths.tmp], {base: './'}))
+      .pipe(concat('malefic.js'))
       .pipe(gulp.dest('bin/dev'));
   } else if (state === STATE_ERR) {
     console.log('State is "error" skipping...');
@@ -78,14 +86,8 @@ gulp.task('compile:dev', ['clean'], function() {
 
 gulp.task('compile:release', ['compile:dev'], function() {
   if (state === STATE_OK) {
-    return gulp.src(paths.src)
+    return gulp.src(paths.dev)
     	.pipe(plumber(handleError))
-    	.pipe(coffeelint())
-      .pipe(coffeelint.reporter())
-    	.pipe(coffee())
-      .pipe(gulp.src(paths.vendor))
-      .pipe(order([paths.vendor, paths.bin], {base: '.'}))
-      //.pipe(uglify())
       .pipe(compress({
         type: 'js'
       }))
