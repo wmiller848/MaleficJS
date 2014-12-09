@@ -21,7 +21,10 @@
 window.Malefic = {} if not window.Malefic
 
 class window.Malefic.View extends window.Malefic.Core
-  constructor: ->
+  #
+  #
+  constructor: () ->
+    @Broker = window.Malefic._broker if not @Broker
     super('Malefic:View')
     @Context = 'body' if not @Context
     @_loaded = false
@@ -50,6 +53,12 @@ class window.Malefic.View extends window.Malefic.Core
 
   _Hook: (ctx=@Context) ->
     @container = @Query(ctx)
+    for event, func of @Events
+      @Broker.On(event, @Actions[func])
+
+  _Unhook: () ->
+    for event, func of @Events
+      @Broker.Off(i, func)
 
   _Clear: ->
     @Log('Widget Clear')
@@ -75,20 +84,28 @@ class window.Malefic.View extends window.Malefic.Core
 
   _Bind: ->
     for id, el of @Elements
-      @Elements[id] = @Query(el)
+      @Elements[id] = @Query(el, false)
     @OnBind?()
 
   Disable: (el=@node) ->
     el.disabled = true
+    el.dataset.disabled = true
 
   Enable: (el=@node) ->
     el.disabled = false
+    el.dataset.disabled = false
 
   Hide: (el=@node) ->
     el.style.display = 'none'
 
   Show: (el=@node) ->
     el.style.display = 'inherit'
+
+  Toggle: (el=@node) ->
+    if el.style.display is 'none'
+      @Show(el)
+    else
+      @Hide(el)
 
   ToggleClass: (el=@node, cssClass) ->
     classes = el.className.split(' ')
@@ -121,11 +138,7 @@ class window.Malefic.View extends window.Malefic.Core
         document.webkitExitFullscreen?()
 
   RenderLoop: (callback) ->
-    startTime = window.webkitAnimationStartTime ||
-      window.mozAnimationStartTime ||
-      new Date().getTime()
-             
-    startTime = 0
+    startTime = window.webkitAnimationStartTime or window.mozAnimationStartTime or new Date().getTime() or 0
     lastTimeStamp = startTime
     lastFpsTimeStamp = startTime
     framesPerSecond = 0

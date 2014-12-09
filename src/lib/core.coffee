@@ -72,12 +72,24 @@ class window.Malefic.Core extends _
 
   #
   #
-  constructor: (@name='Core', @silent=false) ->
+  constructor: (@name='Core', @silent=true) ->
     @version = "v.0.0.1"
     @Log("Starting " + @name)
     @body = document.body
     @_cache = {}
     @host = @Domain()
+
+  #
+  #
+  Random: (size) ->
+    idstr=String.fromCharCode(Math.floor((Math.random()*25)+65))
+    while idstr.length < size
+      # between numbers and characters (48 is 0 and 90 is Z (42-48 = 90)
+      ascicode=Math.floor((Math.random()*42)+48)
+      if ascicode < 58 or ascicode > 64
+        # exclude all chars between : (58) and @ (64)
+        idstr += String.fromCharCode(ascicode)
+    idstr
 
   #
   #
@@ -90,6 +102,12 @@ class window.Malefic.Core extends _
         console.log(prefix + msg)
       else
         console.log(prefix, msg)
+
+  #
+  #
+  FuncName: (func) ->
+    func.toString()
+
   #
   #
   Watch: ->
@@ -238,29 +256,24 @@ class window.Malefic.Core extends _
     root = scope or document
     query = root.querySelectorAll?(selector)
 
-    results =
-      '_qvals': {}
-      '_qkeys': []
-      'length': 0
-      'pop': ->
-        _key = @_qkeys.pop()
-        _q = @_qvals[_key]
-        @_qvals[_key] = null
-        return _q
+    results = []
 
     for el in query
-      results._qvals = []
-      results._qkeys.push(selector)
       if not el.on
         el.on = (event, func) ->
           if typeof event isnt 'string'
             for evt in event
-              el.addEventListener(evt, func, false)
+              @addEventListener(evt, func, false)
           else
-            el.addEventListener(event, func, false)
-      results._qvals[selector] = el
-      results.length++
-    if first then return results.pop()
+            @addEventListener(event, func, false)
+      results.push(el)
+
+    results.on = (event, func) ->
+      for r in @
+        r.on(event, func)
+
+    if first is true then return results.pop()
+    else if results.length is 1 then return results.pop()
     else return results
 
   #
