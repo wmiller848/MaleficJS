@@ -23,16 +23,27 @@ window.Malefic = {} if not window.Malefic
 class window.Malefic.View extends window.Malefic.Core
   #
   #
-  constructor: () ->
-    @Broker = window.Malefic._broker if not @Broker
+  constructor: (@opt) ->
     super('Malefic:View')
+
+    # Bind options
+    for key, opt of @opt
+      @[key] = opt
+    @Data['Model'] = @Model
+    if not @id
+      @id = @Random(8)
+
+    @Broker = window.Malefic._broker if not @Broker
     @Context = 'body' if not @Context
     @_loaded = false
     @_cb = []
     @html = null
     @hbs = null
     @node = null
+    @_elements = @Elements
+    @Elements = []
     @Actions = @Actions()
+
     @_Load()
 
   _Load: ->
@@ -42,49 +53,49 @@ class window.Malefic.View extends window.Malefic.Core
         return @Log(err)
 
       @html = res.toString()
+
       @_Hook()
+
+      @_Clear()
       @_Render()
       @_Bind()
 
+      @_loaded = true
       @Loaded?()
       for cb in @_cb
         cb()
-      @_loaded = true
 
-  _Hook: (ctx=@Context) ->
-    @container = @Query(ctx)
+  _Hook: () ->
     for event, func of @Events
-      @Broker.On(event, @Actions[func])
+      event.sid = @Broker.On(event, @Actions[func])
 
   _Unhook: () ->
     for event, func of @Events
-      @Broker.Off(i, func)
+      @Broker.Off(event, event.sid)
 
   _Clear: ->
     @Log('Widget Clear')
-    node = @Query("[data-id=\"#{@Template}\"]", @container)
-    @context.removeChild(node)
+    @container.removeChild(@node) if @container and @node
 
   _Render: ->
     @Log('Widget Render')
+    @container = @Query(@Context)
     @hbs = Handlebars.compile(@html)
     if @Helpers
       for id, helper of @Helpers
-        Handlebars.registerHelper(id, =>
-          helper(@)
-        )
+        Handlebars.registerHelper(id, helper)
 
     @node = @Append(
       parent: @container
       type: 'div'
       attributes:
-        'data-id': @Template
-      html: @hbs(@Data)
+        'data-id': @Template + '-' + @id
+      html: @hbs(@Model)
     )
 
   _Bind: ->
-    for id, el of @Elements
-      @Elements[id] = @Query(el, false)
+    for id, el of @_elements
+      @Elements[id] = @Query(el, false, @node)
     @OnBind?()
 
   Disable: (el=@node) ->
@@ -103,6 +114,10 @@ class window.Malefic.View extends window.Malefic.Core
 
   Toggle: (el=@node) ->
     if el.style.display is 'none'
+      if el is @node
+        @_Clear()
+        @_Render()
+        @_Bind()
       @Show(el)
     else
       @Hide(el)

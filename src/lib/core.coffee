@@ -302,6 +302,12 @@ class window.Malefic.Core extends _
       options.parent.appendChild(child)
     child
 
+  Remove: (parent, nodes, options) ->
+    if nodes.length > 0
+      for n in nodes
+        parent.removeChild(n)
+    else parent.removeChild(nodes)
+
   #
   #
   Cache: (key, value, persist, options) ->
