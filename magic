@@ -1,0 +1,48 @@
+#!/bin/bash
+
+CONTAINER="MaleficJS"
+
+build() {
+  echo "Building... $CONTAINER"
+  docker build -t wmiller848/maleficjs .
+}
+
+clean() {
+  echo "Cleaning $CONTAINER"
+  STDOUT=`docker rm maleficjs`
+}
+
+start() {
+  echo "Starting... $CONTAINER"
+  docker run -it -h maleficjs -P --name=maleficjs wmiller848/maleficjs bash -l
+}
+
+stop() {
+  echo "Stoping... $CONTAINER"
+  STDOUT=`docker stop maleficjs`
+}
+
+case $1 in
+	"build")
+    build
+	;;
+  "clean")
+    clean
+  ;;
+  "start")
+    stop
+    clean
+    start
+  ;;
+  "stop")
+    stop
+  ;;
+  "help"|*)
+    echo "./magic [CMD]"
+    echo "-------------"
+    echo "build - Build the docker image"
+    echo "clean - Remove the docker image"
+    echo "start - Start the docker container"
+    echo "stop - Stop the docker container"
+  ;;
+esac
