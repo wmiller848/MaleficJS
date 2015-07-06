@@ -65,11 +65,11 @@ class window.Malefic.View extends window.Malefic.Core
       for cb in @_cb
         cb()
 
-  _Hook: () ->
+  _Hook: ->
     for event, func of @Events
       event.sid = @Broker.On(event, @Actions[func])
 
-  _Unhook: () ->
+  _Unhook: ->
     for event, func of @Events
       @Broker.Off(event, event.sid)
 
@@ -133,7 +133,7 @@ class window.Malefic.View extends window.Malefic.Core
       el.className += cssClass
 
   ToggleFullScreen: ->
-    if !document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement
+    if not document.fullscreenElement and not document.mozFullScreenElement and not document.webkitFullscreenElement and not document.msFullscreenElement
       if document.documentElement.requestFullscreen
         document.documentElement.requestFullscreen?()
       else if document.documentElement.msRequestFullscreen
@@ -151,7 +151,8 @@ class window.Malefic.View extends window.Malefic.Core
         document.mozCancelFullScreen?()
       else if document.webkitExitFullscreen
         document.webkitExitFullscreen?()
-
+  ##
+  ##
   RenderLoop: (callback) ->
     startTime = window.webkitAnimationStartTime or window.mozAnimationStartTime or new Date().getTime() or 0
     lastTimeStamp = startTime
@@ -177,7 +178,7 @@ class window.Malefic.View extends window.Malefic.Core
         framesPerSecond: framesPerSecond
       )
     window.requestAnimationFrame(nextFrame)
-
+    
   Ready: (cb) ->
     if @_loaded is true then cb()
     else @_cb.push(cb)

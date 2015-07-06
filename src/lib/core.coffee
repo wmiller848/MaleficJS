@@ -200,7 +200,7 @@ class window.Malefic.Core extends _
       progress: (status) =>
         #@Log('progress')
         #@Log(status)
-        promise.status?(status)
+        promise.Status?(status)
       success: (data, headers) =>
         #@Log('Success')
         result =
@@ -243,10 +243,10 @@ class window.Malefic.Core extends _
             parser.parseFromString(@toString(), 'text/xml')
           'headers': ->
             headers
-        promise.then?(null, result)
+        promise.Then?(null, result)
       fail: (err) =>
         #@Log('Fail')
-        promise.then?(err, null)
+        promise.Then?(err, null)
     )
     promise
 

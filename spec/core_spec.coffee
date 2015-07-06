@@ -101,7 +101,7 @@ describe('Core', ->
           total: 100
         @helpers.Ajax.Trigger('progress', e)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.status = (status) =>
+        req.Status = (status) =>
           expect(status).toBe('100%')
           done()
       )
@@ -114,7 +114,7 @@ describe('Core', ->
             'response': buffer
         @helpers.Ajax.Trigger('load', e)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.then = (err, res) =>
+        req.Then = (err, res) =>
           expect(err).toBe(null)
           expect(res).toBeDefined()
           done()
@@ -126,7 +126,7 @@ describe('Core', ->
           'target': errMsg
         @helpers.Ajax.Trigger('error', e)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.then = (err, res) =>
+        req.Then = (err, res) =>
           expect(err).toBeDefined()
           expect(err).toBe(errMsg)
           expect(res).toBe(null)
@@ -139,7 +139,7 @@ describe('Core', ->
           'target': errMsg
         @helpers.Ajax.Trigger('abort', e)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.then = (err, res) =>
+        req.Then = (err, res) =>
           expect(err).toBeDefined()
           expect(err).toBe(errMsg)
           expect(res).toBe(null)
@@ -171,7 +171,7 @@ describe('Core', ->
       it('should support toArray', (done) ->
         @helpers.Ajax.Trigger('load', @eJSON)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.then = (err, res) =>
+        req.Then = (err, res) =>
           expect(err).toBe(null)
           expect(res).toBeDefined()
           expect(res.toArray()).toEqual(@bufferJSON)
@@ -181,7 +181,7 @@ describe('Core', ->
       it('should support toString', (done) ->
         @helpers.Ajax.Trigger('load', @eJSON)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.then = (err, res) =>
+        req.Then = (err, res) =>
           expect(err).toBe(null)
           expect(res).toBeDefined()
           expect(res.toString()).toBe(@json)
@@ -191,7 +191,7 @@ describe('Core', ->
       it('should support toBase64', (done) ->
         @helpers.Ajax.Trigger('load', @eJSON)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.then = (err, res) =>
+        req.Then = (err, res) =>
           expect(err).toBe(null)
           expect(res).toBeDefined()
           expect(res.toBase64()).toEqual(btoa(@json))
@@ -201,7 +201,7 @@ describe('Core', ->
       it('should support toJSON', (done) ->
         @helpers.Ajax.Trigger('load', @eJSON)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.then = (err, res) =>
+        req.Then = (err, res) =>
           expect(err).toBe(null)
           expect(res).toBeDefined()
           expect(res.toJSON()).toEqual(JSON.parse(@json))
@@ -211,7 +211,7 @@ describe('Core', ->
       xit('should support toXML', (done) ->
         @helpers.Ajax.Trigger('load', @eXML)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.then = (err, res) =>
+        req.Then = (err, res) =>
           expect(err).toBe(null)
           expect(res).toBeDefined()
           parser = new DOMParser()
@@ -223,7 +223,7 @@ describe('Core', ->
       it('should support headers', (done) ->
         @helpers.Ajax.Trigger('load', @eJSON)
         req = @core.Ajax('file://api.mapchat.io/healthcheck')
-        req.then = (err, res) =>
+        req.Then = (err, res) =>
           expect(err).toBe(null)
           expect(res).toBeDefined()
           headers = res.headers()

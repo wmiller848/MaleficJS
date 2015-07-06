@@ -21,5 +21,5 @@
 window.Malefic = {} if not window.Malefic
 
 class window.Malefic.Model extends window.Malefic.Core
-  constructor: () ->
+  constructor: ->
     super('Malefic:Model')

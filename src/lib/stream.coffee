@@ -21,7 +21,7 @@
 window.Malefic = {} if not window.Malefic
 
 class window.Malefic.Stream extends window.Malefic.Core
-  constructor: () ->
+  constructor: ->
     super('Malefic:Stream')
     @_events = {}
     @_log = []
@@ -35,7 +35,7 @@ class window.Malefic.Stream extends window.Malefic.Core
         data
       ]
     )
-    if @_events[event] && @_events[event].length > 0
+    if @_events[event] and @_events[event].length > 0
       for list in @_events[event]
         list?.func?(data)
 
@@ -76,6 +76,6 @@ class window.Malefic.Stream extends window.Malefic.Core
         delete @_events[event] if not @_events[event].length is 0
         return
 
-  ClearLogs: () ->
+  ClearLogs: ->
     @_log = null
     @_log = []
