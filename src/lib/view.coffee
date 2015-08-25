@@ -29,7 +29,7 @@ class window.Malefic.View extends window.Malefic.Core
     # Bind options
     for key, opt of @opt
       @[key] = opt
-    @Data['Model'] = @Model
+    @Data['Model'] = @Model if @Model
     if not @id
       @id = @Random(8)
 
@@ -40,11 +40,11 @@ class window.Malefic.View extends window.Malefic.Core
     @html = null
     @hbs = null
     @node = null
-    @_elements = @Elements
+    @_elements = @Elements?
     @Elements = []
-    @Actions = @Actions()
+    @Actions = @Actions?()
 
-    @_Load()
+    @_Load() if @Template?
 
   _Load: ->
     req = @Ajax(@Template)
@@ -178,7 +178,7 @@ class window.Malefic.View extends window.Malefic.Core
         framesPerSecond: framesPerSecond
       )
     window.requestAnimationFrame(nextFrame)
-    
+
   Ready: (cb) ->
     if @_loaded is true then cb()
     else @_cb.push(cb)

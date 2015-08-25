@@ -25,16 +25,18 @@ class window.Malefic.Stream extends window.Malefic.Core
     super('Malefic:Stream')
     @_events = {}
     @_log = []
+    @_logging = false
 
   Trigger: (event, data) ->
     #console.log(event, data)
-    @_log.push(
-      event: "Trigger"
-      params: [
-        event,
-        data
-      ]
-    )
+    if @_logging
+      @_log.push(
+        event: "Trigger"
+        params: [
+          event,
+          data
+        ]
+      )
     if @_events[event] and @_events[event].length > 0
       for list in @_events[event]
         list?.func?(data)
@@ -47,27 +49,29 @@ class window.Malefic.Stream extends window.Malefic.Core
       func: func
     @_events[event].push(listener)
 
-    @_log.push(
-      event: "On"
-      params: [
-        event,
-        @FuncName(func)
-      ]
-      id: listener.id
-    )
+    if @_logging
+      @_log.push(
+        event: "On"
+        params: [
+          event,
+          @FuncName(func)
+        ]
+        id: listener.id
+      )
 
     listener.id
 
   Off: (event, listenerID) ->
     #console.log(event)
-    @_log.push(
-      event: "Off"
-      params: [
-        event,
-        listenerID
-      ]
-      id: listenerID
-    )
+    if @_logging
+      @_log.push(
+        event: "Off"
+        params: [
+          event,
+          listenerID
+        ]
+        id: listenerID
+      )
     return @_events[event] = null if listenerID is null
 
     for i, list of @_events[event]

@@ -1,5 +1,5 @@
 #
-FROM fedora:latest
+FROM fedora:22
 
 RUN yum install -y glibc-devel glibc-headers glibc-static
 RUN yum install -y gcc gcc-c++ cpp pcre-devel
