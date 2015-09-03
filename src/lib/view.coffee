@@ -40,15 +40,15 @@ class window.Malefic.View extends window.Malefic.Core
     @html = null
     @hbs = null
     @node = null
-    @_elements = @Elements?
-    @Elements = []
+    @_elements = @Elements if @Elements
+    @Elements = {}
     @Actions = @Actions?()
 
-    @_Load() if @Template?
+    @_Load() if @Template
 
   _Load: ->
     req = @Ajax(@Template)
-    req.then = (err, res) =>
+    req.Then = (err, res) =>
       if err
         return @Log(err)
 
@@ -153,31 +153,42 @@ class window.Malefic.View extends window.Malefic.Core
         document.webkitExitFullscreen?()
   ##
   ##
-  RenderLoop: (callback) ->
-    startTime = window.webkitAnimationStartTime or window.mozAnimationStartTime or new Date().getTime() or 0
-    lastTimeStamp = startTime
-    lastFpsTimeStamp = startTime
+  RenderLoop: (callback, fps_cap) ->
+    start = new Date().getTime()
+
+    # lastTimeStamp = startTime
+    # lastFpsTimeStamp = startTime
+    # framesPerSecond = 0
+
+    interval = 1000 / fps_cap
+
+    lastFpsTimeStamp = start
     framesPerSecond = 0
     frameCount = 0
 
-    nextFrame = (time) ->
-      window.requestAnimationFrame(nextFrame)
-      if lastTimeStamp - lastFpsTimeStamp >= 1000
+    tick = ->
+      window.requestAnimationFrame(tick)
+
+      now = new Date().getTime()
+      frameCount++
+      if now - lastFpsTimeStamp >= 1000
         framesPerSecond = frameCount
         frameCount = 0
-        lastFpsTimeStamp = lastTimeStamp
+        lastFpsTimeStamp = now
 
-      frameCount++
-      lastTimeStamp = time
+      delta = now - start
 
-      callback?(
-        startTime: startTime
-        timeStamp: time
-        elapsed: time-startTime
-        frameTime: time-lastTimeStamp
-        framesPerSecond: framesPerSecond
-      )
-    window.requestAnimationFrame(nextFrame)
+      if delta > interval
+        start = now - (delta % interval)
+        callback?(
+          startTime: start
+          timeStamp: now
+          elapsed: now - start
+          realFramesPerSecond: framesPerSecond
+          framesPerSecond: fps_cap
+        )
+
+    tick()
 
   Ready: (cb) ->
     if @_loaded is true then cb()

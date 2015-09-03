@@ -275,7 +275,8 @@ class window.Malefic.Core extends _
     if first is true then return results.pop()
     else if results.length is 1 then return results.pop()
     else return results
-
+  Q: ->
+    @Query.apply(@Query, arguments)
   #
   #
   #
