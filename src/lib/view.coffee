@@ -90,8 +90,12 @@ class window.Malefic.View extends window.Malefic.Core
       type: 'div'
       attributes:
         'data-id': @Template + '-' + @id
-      html: @hbs(@Model)
+      html: @hbs(@Data['Model'])
     )
+    
+  Render: ->
+    @Remove(@container, @container.children)
+    @_Render()
 
   _Bind: ->
     for id, el of @_elements
@@ -153,7 +157,7 @@ class window.Malefic.View extends window.Malefic.Core
         document.webkitExitFullscreen?()
   ##
   ##
-  RenderLoop: (callback, fps_cap) ->
+  RenderLoop: (callback, fps_cap=60) ->
     start = new Date().getTime()
 
     # lastTimeStamp = startTime
