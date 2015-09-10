@@ -7,6 +7,13 @@ build() {
   docker build -t wmiller848/maleficjs .
 }
 
+install() {
+  build
+  rm -rf ./bin
+  docker run --rm -v $(PWD)/bin:/host_bin wmiller848/maleficjs cp -r /opt/maleficjs/bin/. /host_bin/
+  cp ./bin/dev/malefic.js $INSTALL_DIR
+}
+
 clean() {
   echo "Cleaning $CONTAINER"
   STDOUT=`docker rm maleficjs`
@@ -26,6 +33,9 @@ case $1 in
 	"build")
     build
 	;;
+  "install")
+    install
+	;;
   "clean")
     clean
   ;;
@@ -41,6 +51,7 @@ case $1 in
     echo "./magic [CMD]"
     echo "-------------"
     echo "build - Build the docker image"
+    echo "build - Build the docker image and install to ./bin"
     echo "clean - Remove the docker image"
     echo "start - Start the docker container"
     echo "stop - Stop the docker container"
