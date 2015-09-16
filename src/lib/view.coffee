@@ -56,9 +56,9 @@ class window.Malefic.View extends window.Malefic.Core
 
       @_Hook()
 
-      @_Clear()
+      # @_Clear()
       @_Render()
-      @_Bind()
+      # @_Bind()
 
       @_loaded = true
       @Loaded?()
@@ -84,31 +84,54 @@ class window.Malefic.View extends window.Malefic.Core
     if @Helpers
       for id, helper of @Helpers
         Handlebars.registerHelper(id, helper)
-
-    @node = @Append(
-      parent: @container
-      type: 'div'
-      attributes:
-        'data-id': @Template + '-' + @id
-      html: @hbs(@Data['Model'])
-    )
+    @Render()
+    # @node = @Append(
+    #   parent: @container
+    #   type: 'div'
+    #   attributes:
+    #     'data-id': @Template + '-' + @id
+    #   html: @hbs(@Data['Model'])
+    # )
 
   Render: ->
     # @Remove(@container, @container.children)
     # @_Render()
-    node_root = @node.children[0]
+    node_root = @container
     html_str = @hbs(@Data['Model'])
     html_sig = @_signHTML(node_root, html_str)
 
+  _replace_sig: (root, node) ->
+    node.outerHTML = root.outerHTML
+
+  _burn_sig: (root, node) ->
+    node.className = root.className
+    node.innerHTML = root.innerHTML
+    node.style.cssText = root.style.cssText
+
   _match_sig: (root, node) ->
     # console.log('Root or Node has no children')
-    if root.innerHTML is node.innerHTML
-      # console.log('Match')
-      return 0
-    else
-      # console.log('Mismatch')
-      node.innerHTML = root.innerHTML
+    if root.innerHTML isnt node.innerHTML
+      @_burn_sig(root, node)
       return -1
+    else
+      return 0
+
+  _match_meta: (root, node) ->
+    if root.src isnt node.src
+      @_replace_sig(root, node)
+      return -1
+    if root.tagName isnt node.tagName
+      @_replace_sig(root, node)
+      return -1
+    if root.className isnt node.className
+      @_burn_sig(root, node)
+      # @_replace_sig(root, node)
+      return -1
+    if root.style.cssText isnt node.style.cssText
+      @_burn_sig(root, node)
+      # @_replace_sig(root, node)
+      return -1
+    return 0
 
   # Recursive search for rendering
   # depth is current level
@@ -117,32 +140,37 @@ class window.Malefic.View extends window.Malefic.Core
   _sign: (depth, root, node) ->
     # console.log(depth, root, node)
     if root and node
-      if root.tagName isnt node.tagName
-        return node.innerHTML = root.innerHTML
+      if depth isnt 0
+        return -1 if @_match_meta(root, node) is -1
       if root.children and node.children
         if root.children.length is node.children.length
           len = root.children.length
           if len > 0
+            failed = 0
             for i in [0..len]
-              status = @_sign(depth+1, root.children[i], node.children[i])
-            return 0
+              status = @_sign(depth + 1, root.children[i], node.children[i])
+              failed = -1 if status is -1
+            return failed
           else
             return @_match_sig(root, node)
         else
           if root.children.length > node.children.length
             len = root.children.length
             if len > 0
+              failed = 0
               for i in [0..len]
                 if i < node.children.length
-                  status = @_sign(depth+1, root.children[i], node.children[i])
+                  status = @_sign(depth + 1, root.children[i], node.children[i])
+                  failed = -1 if status is -1
                 else
                   node.appendChild(root.children[i].cloneNode(true)) if root.children[i]
-              return 0
+                  failed = -1
+              return failed
             else
               return @_match_sig(root, node)
           else
             # TODO :: handle subtraction
-            node.innerHTML = root.innerHTML
+            return @_match_sig(root, node)
       else
         # console.log('Root or Node has no children property')
         return -1
@@ -153,12 +181,9 @@ class window.Malefic.View extends window.Malefic.Core
   _signHTML: (node, html) ->
     parser = new DOMParser()
     htmlSig = parser.parseFromString(html, 'text/html')
-    root = htmlSig.body.children[0]
-    @_sign(0, root, node)
-    # i = 0
-    # for child_root in root.children
-    #   child_node = node.children[i]
-    #   console.log(child_root, child_node)
+    root = htmlSig.body
+    status = @_sign(0, root, node)
+    @_Bind() if status is -1
 
 
   _Bind: ->
@@ -183,9 +208,7 @@ class window.Malefic.View extends window.Malefic.Core
   Toggle: (el=@node) ->
     if el.style.display is 'none'
       if el is @node
-        @_Clear()
-        @_Render()
-        @_Bind()
+        @Render()
       @Show(el)
     else
       @Hide(el)
