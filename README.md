@@ -19,7 +19,7 @@ MaleficJS is designed to work seamlessly with web sockets and modern HTML5 featu
 Get a random string of a specified size
 
 @Params
-size - required
+* size - required
 
 ```
   core_www = new Malefic.Core()
@@ -31,7 +31,7 @@ size - required
 Malefic console log
 
 @Params
-message - required
+* message - required
 
 ```
   core_www = new Malefic.Core()
@@ -40,6 +40,9 @@ message - required
 
 #### FuncName ####
 Get the function name by function reference
+
+@Params
+* function - required
 
 ```
   core_www = new Malefic.Core()
@@ -50,7 +53,7 @@ Get the function name by function reference
 Create an observer on a given object
 
 @Params
-object - required
+* object - required
 
 ```
   obj =
@@ -74,7 +77,7 @@ object - required
 Get the root domain
 
 @Params
-url - optional, default=window.location.host
+* url - optional, default=window.location.host
 
 ```
   core_www = new Malefic.Core()
@@ -87,10 +90,10 @@ url - optional, default=window.location.host
 Make a async http request
 
 @Params
-url - required
-method - optional, default='GET'
-data - optional, default=null
-headers - optional, default=null
+* url - required
+* method - optional, default='GET'
+* data - optional, default=null
+* headers - optional, default=null
 
 ```
   core_www = new Malefic.Core()
@@ -115,9 +118,9 @@ headers - optional, default=null
 Find an element or elements in the DOM
 
 @Params
-selector - required
-first - optional, default=false
-element - optional, default=document
+* selector - required
+* first - optional, default=false
+* element - optional, default=document
 
 ```
   core_www = new Malefic.Core()
@@ -128,7 +131,7 @@ element - optional, default=document
 Append an element to the DOM
 
 @Params
-options - required
+* options - required
 
 ```
   core_www = new Malefic.Core()
@@ -144,8 +147,8 @@ options - required
 Append an element to the DOM
 
 @Params
-parent - required
-node or nodes - required
+* parent - required
+* node or nodes - required
 
 ```
   core_www = new Malefic.Core()
@@ -158,10 +161,10 @@ node or nodes - required
 Get or set a key value pair
 
 @Params
-key - required
-value - optional
-persist - optional
-options - optional
+* key - required
+* value - optional
+* persist - optional
+* options - optional
 
 ```
   core_www = new Malefic.Core()
