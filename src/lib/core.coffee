@@ -302,12 +302,16 @@ class window.Malefic.Core extends _
     else
       options.parent.appendChild(child)
     child
+  A: ->
+    @Append.apply(@Append, arguments)
 
-  Remove: (parent, nodes, options) ->
+  Remove: (parent, nodes) ->
     if nodes.length > 0
       for n in nodes
         parent.removeChild(n)
     else parent.removeChild(nodes)
+  R: ->
+    @Remove.apply(@Remove, arguments)
 
   #
   #
@@ -392,3 +396,5 @@ class window.Malefic.Core extends _
         if options?.noCookies isnt false
           value = JSON.stringify(value) if typeof value isnt 'string'
           document.cookie = "#{escape(key)}=#{escape(value)}; expires=#{expires}; domain=#{domain}; secure=true;"
+  C: ->
+    @Cache.apply(@Cache, arguments)
