@@ -45,8 +45,11 @@ Get the function name by function reference
 * function - required
 
 ```
+  cool_func = ->
+    console.log('Doing things!')
+
   core_www = new Malefic.Core()
-  core_www.Log('Something to log')
+  core_www.Log(cool_func) # 'cool_func'
 ```
 
 #### Watch ####
@@ -87,7 +90,7 @@ Get the root domain
 ```
 
 #### Ajax ####
-Make a async http request
+Make an async http request
 
 ##### @Params #####
 * url - required
@@ -98,6 +101,8 @@ Make a async http request
 ```
   core_www = new Malefic.Core()
   request = core_www.Ajax(url, method, data, headers)
+  request.Progress = (status) ->
+    console.log(status) # '0%', '2%', '10%', etc..
   request.Then = (err, response) ->
     console.log(err, response)
 
