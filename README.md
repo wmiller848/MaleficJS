@@ -7,7 +7,8 @@
 MaleficJS is a utility belt for building modular web applications.
 It features a promise based API for http request, and is binary safe.
 Designed to work easily with both video data or JSON utf8 data. MaleficJS can be
-used to create widget based applications that can utilize a streaming api.
+used to create widget based applications that can utilize a message based api.
+MaleficJS is designed to work seamlessly with web sockets and modern HTML5 features.
 
 ## Usage ##
 \* All examples are in coffee script
@@ -17,7 +18,7 @@ used to create widget based applications that can utilize a streaming api.
 #### Random ####
 Get a random string of a specified size
 
-\@Params
+@Params
     size - required
 
 ```
@@ -29,7 +30,7 @@ Get a random string of a specified size
 #### Log ####
 Malefic console log
 
-\@Params
+@Params
     message - required
 
 ```
@@ -48,7 +49,7 @@ Get the function name by function reference
 #### Watch ####
 Create an observer on a given object
 
-\@Params
+@Params
     object - required
 
 ```
@@ -72,7 +73,7 @@ Create an observer on a given object
 #### Domain ####
 Get the root domain
 
-\@Params
+@Params
     url - optional, default=window.location.host
 
 ```
@@ -85,7 +86,7 @@ Get the root domain
 #### Ajax ####
 Make a async http request
 
-\@Params
+@Params
     url - required
     method - optional, default='GET'
     data - optional, default=null
@@ -113,7 +114,7 @@ Make a async http request
 #### Query / Q ####
 Find an element or elements in the DOM
 
-\@Params
+@Params
     selector - required
     first - optional, default=false
     element - optional, default=document
@@ -126,7 +127,7 @@ Find an element or elements in the DOM
 #### Append / A ####
 Append an element to the DOM
 
-\@Params
+@Params
     options - required
 
 ```
@@ -142,7 +143,7 @@ Append an element to the DOM
 #### Remove / R ####
 Append an element to the DOM
 
-\@Params
+@Params
     parent - required
     node or nodes - required
 
@@ -156,7 +157,7 @@ Append an element to the DOM
 #### Cache / C ####
 Get or set a key value pair
 
-\@Params
+@Params
     key - required
     value - optional
     persist - optional
